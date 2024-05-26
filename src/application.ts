@@ -57,8 +57,8 @@ import { CONFIG } from './app/config';
      */
     private InitMiddlewares() {
         Logging.dev("Middlewares Initiated")
-        if (process.env.APP_ENV === 'PRODUCTION') {
-            AppServer.App.use(AppMiddlewares.IRequestHeaders)
+        AppServer.App.use(AppMiddlewares.IRequestHeaders)
+        if (process.env.APP_ENV === 'PRODUCTION') {           
             AppServer.App.use(AppMiddlewares.isApiProtected)
         }
     }

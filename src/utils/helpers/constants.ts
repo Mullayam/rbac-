@@ -21,7 +21,8 @@ export const METADATA_KEYS = {
     ABILITY: Symbol('ability')
 
 }
-export const RolesArray = Object.values(USER_ROLE);
+export const UserRolesArray = Object.values(USER_ROLE);
+export type AllowedRoles = keyof typeof USER_ROLE;
 export enum AbitlityActions {
     Manage = 'manage',
     Create = 'create',

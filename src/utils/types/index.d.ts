@@ -17,17 +17,18 @@ declare global {
             };
             files?: fileUpload.FileArray | null | undefined;
             ability: Ability<[string, any]>;
-            user?: UserInfoJwtPayload;
+            user: IUser;
             tenantId: string;
             dbConfig: null;
         }
     }
 }
-interface UserInfoJwtPayload {
-    uid?: string;
-    email?: string;
-    role?: string;
-    status?: string;
+interface IUser {
+    name: string;
+    uid: string;
+    email: string;
+    role: string;
+    status: string;
 }
 
 export interface ResponseHandler extends Response {
@@ -39,14 +40,7 @@ interface CustomResponse {
     result: null | Record<string, any>;
     [key: string]: any;
 }
-export interface IUser {
-    firstName: string;
-    lastName: string;
-    avatar: string;
-    email: string;
-    role: IRole;
-    isEmailVerified: boolean;
-}
+ 
 
 export interface InterceptorsSettings {
     response: Record<string, any>;

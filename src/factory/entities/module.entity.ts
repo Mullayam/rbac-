@@ -19,8 +19,8 @@ export class ModulesEntity {
     @UpdateDateColumn()
     updated_at!: Date
 
-    @ManyToOne(type => SubModulesEntity, module => module.parentModule)
-    submodules!: string
+    @OneToMany(type => SubModulesEntity, module => module.parentModule)
+    submodules!: SubModulesEntity[]
 
     @OneToMany(type => RacMapEntity, racmap => racmap.modules)
     racmap!: RacMapEntity[]

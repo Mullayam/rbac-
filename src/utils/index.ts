@@ -5,10 +5,10 @@ import jwt from 'jsonwebtoken'
 import { CONFIG } from "@/app/config";
 
 class Utils {
-    async HashPassword(PasswordStr: string): Promise<string> {
+     HashPassword(PasswordStr: string): string {
         return bcrypt.hashSync(PasswordStr, salt);
     }
-    async ComparePassword(HashedPassword: string, Password: string): Promise<boolean> {
+      ComparePassword(HashedPassword: string, Password: string): boolean {
         return bcrypt.compareSync(Password, HashedPassword);
     }
     signJWT(payload: any, kid: string): string {

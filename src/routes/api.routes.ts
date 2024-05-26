@@ -1,8 +1,11 @@
 //  Write Your All API Routes Here
-import AuthController from '@/controllers/user/AuthController';
-import RolesController from '@/controllers/user/RolesController';
 import { Exception } from '@enjoys/exception';
 import { Router } from 'express'
+import { MainRoutes } from './main.routes';
+import { ApplyMiddleware } from '@/middlewares/all.middlwares';
+import { Validator } from '@/middlewares/validator.middleware';
+import { UserReqValidator } from '@/factory/validators/User.request.validator';
+import { UserController, AuthController } from '@/controllers/user';
 
 export class ApiRoutes {
     constructor(public apiRoutes: Router = Router()) {
@@ -15,8 +18,12 @@ export class ApiRoutes {
      Creates the Public Routes 
      */
     private PublicRoutes(): void {
-        this.apiRoutes.post("/auth/login", AuthController.login)
-        this.apiRoutes.post("/auth/register", AuthController.register)
+        this.apiRoutes.post("/auth/login", AuthController.default.login)
+        this.apiRoutes.post("/auth/register", AuthController.default.register)
+        this.apiRoutes.post("/auth/web/register-challenge", UserController.default.registerForChallenge)
+        this.apiRoutes.post("/auth/web/verify-challenge", UserController.default.verifyChallenge)
+        this.apiRoutes.post("/auth/web/login-challenge", UserController.default.loginForChallenge)
+        this.apiRoutes.post("/auth/web/login-verify-challenge", UserController.default.loginVerifyChallenge)
 
     }
     /**
@@ -25,16 +32,13 @@ export class ApiRoutes {
      * @protected
      * @return {void}
      */
-    protected ProtectedRoutes(): void {
-        this.apiRoutes.route("/role")
-            .get(RolesController.findAll)
-            .put(RolesController.updateRole)
-            .post(RolesController.create)
-            .delete(RolesController.findAll)
+    protected ProtectedRoutes(): void {        
 
-        this.apiRoutes.get("/me", AuthController.hello)
-        this.apiRoutes.get("/protected", AuthController.hello)
-        this.apiRoutes.get("/public", AuthController.hello)
+        this.apiRoutes.get("/me", AuthController.default.hello)
+        this.apiRoutes.get("/protected", AuthController.default.hello)
+        this.apiRoutes.get("/public", AuthController.default.hello)
+
+        this.apiRoutes.use(ApplyMiddleware("customMiddlewareFunction"), Validator.forFeature(UserReqValidator.login), new MainRoutes().routes)
     }
     /**
      * A function to handle unhandled routes.

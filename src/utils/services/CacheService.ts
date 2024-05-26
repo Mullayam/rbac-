@@ -1,23 +1,26 @@
+import { CONFIG } from "@/app/config";
 import { Logging } from "@/logs";
-import redis, { RedisClientType } from "redis";
-
+import { createClient, RedisClientType } from "redis";
 
 export class CacheService {
     public cache: RedisClientType
+    private static instance: CacheService
     constructor(CACHE_ENBALED: string = "false") {
         Logging.dev("Redis Cache Enabled ")
-        this.cache = redis.createClient({
-            password: '',
-            socket: {
-                host: '',
-                port: 19063
-            }
+        this.cache =  createClient({
+           url:`${CONFIG.CACHE.CACHE_HOST}:${CONFIG.CACHE.CACHE_PORT}`,
         });
         if (CACHE_ENBALED !== "false") {
             this.ConnectRedisClient()
+            this.cache = this.cache 
         }
     }
-
+    static createInstance(CACHE_ENBALED: string = "false"): CacheService {
+        if (!(this instanceof CacheService)) {          
+            CacheService.instance = new CacheService(CACHE_ENBALED);
+        }
+        return CacheService.instance
+    }
     /**
      * Connect to the Redis client.
      *
